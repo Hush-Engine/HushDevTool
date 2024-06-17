@@ -11,7 +11,7 @@ public static class HushAssertions
         }
     }
 
-    public static void AssertNotNull<T>(T obj, string message = "") where T : class
+    public static void AssertNotNull<T>(T? obj, string message = "") where T : class
     {
         if (obj == null)
         {

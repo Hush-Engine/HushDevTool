@@ -7,6 +7,13 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <WarningLevel>4</WarningLevel>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+  </PropertyGroup>
   <ItemGroup>
     <None Remove="Controllers\" />
     <None Remove="Models\" />
@@ -22,5 +29,9 @@
     <Folder Include="Models\CodeQuality\" />
     <Folder Include="Services\" />
     <Folder Include="Utils\" />
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="Cocona" Version="2.2.0" />
+    <PackageReference Include="Avalonia.Desktop" Version="11.0.10" />
   </ItemGroup>
 </Project>
