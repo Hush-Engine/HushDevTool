@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 25.0.1706.7
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HushDevTool", "HushDevTool\HushDevTool.csproj", "{796A2E5B-BA89-4719-8D54-F9AC1D25FB65}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{796A2E5B-BA89-4719-8D54-F9AC1D25FB65}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{796A2E5B-BA89-4719-8D54-F9AC1D25FB65}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{796A2E5B-BA89-4719-8D54-F9AC1D25FB65}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{796A2E5B-BA89-4719-8D54-F9AC1D25FB65}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {14AF009F-1A4F-44DD-83FC-7925DC42ED8F}
+	EndGlobalSection
+EndGlobal
