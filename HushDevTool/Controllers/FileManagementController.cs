@@ -1,22 +1,19 @@
 ﻿using System;
 using Cocona;
 using HushDevTool.Utils;
-using Avalonia.Controls;
+using Xamarin.Essentials;
+using Plugin.FilePicker;
+using HushDevTool.Services;
+
 namespace HushDevTool.Controllers;
 
 public class FileManagementController
 {
-	private readonly List<FileDialogFilter> FileFilters = new List<FileDialogFilter>
-    {
-		new FileDialogFilter
-		{
-			Extensions = {"cpp", "hpp", "cs", "cmake", "ps1", "py", "sh"}
-		}
-    };
+	private ICommandLineService m_commandLineService;
 
-
-    public FileManagementController()
+    public FileManagementController(ICommandLineService commandLineService)
 	{
+		this.m_commandLineService = commandLineService;
 	}
 
 	[Command("new-file", Description = "Adds a new file to the project.")]
@@ -29,24 +26,38 @@ public class FileManagementController
 	{
 		if (string.IsNullOrEmpty(filePath))
 		{
-			var saveFileDialog = new SaveFileDialog
+			bool success = FileDialogNative.ShowNewFileDialog("New templated file", out filePath);
+			if (!success)
 			{
-				Title = "Create a new templated file",
-				Directory = "./",
-				Filters = FileFilters
-			};
-			
-			string? resultPath = await saveFileDialog.ShowAsync(null);
-
-			HushAssertions.AssertNotNull(resultPath, "❌ File creation cancelled by the user!");
-
-            filePath = resultPath!;
-		}
-		HushAssertions.AssertTrue(filePath != string.Empty, "❌ Received empty path, you must set a file name!");
+                Logger.Error("❌ Received empty path, you must set a file name!");
+                return;
+            }
+        }
 		if (string.IsNullOrEmpty(brief))
 		{
-
+			Console.Write("Brief description of the file: ");
+			brief = Console.ReadLine();
 		}
+		string author = this.GetGitUserString();
+		string dateString = DateTime.Now.ToString("yyyy-MM-dd");
+		
+		Logger.Debug(dateString);
+		Logger.Debug(author);
 	}
+
+	/// <summary>
+	/// Gets the currently active git user and its email modifying the project
+	/// </summary>
+	private string GetGitUserString()
+	{
+		string result;
+        int rc = this.m_commandLineService.RunWithOutput("git", "config user.name", out result);
+		if (rc != 0)
+		{
+			throw new CoconaException("Git is not installed or failed to run, try reinstalling to fix this issue!");
+		}
+		return result;
+	}
+
 }
 

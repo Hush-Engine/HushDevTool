@@ -1,6 +1,7 @@
 ﻿using System;
 using Cocona;
 using HushDevTool.Models.CodeQuality;
+using HushDevTool.Utils;
 
 namespace HushDevTool.Controllers;
 
@@ -36,7 +37,7 @@ public class CodeQualityController
 		ICollection<CodeReference> references = await this.m_analyzerService.GetMetricsInSource("/Users/leo.gonzalez/Documents/Projects/Personal/Hush-Engine");
 		foreach (var item in references)
 		{
-			Console.WriteLine(item);
+			Logger.Info(item.ToString());
 		}
 	}
 
