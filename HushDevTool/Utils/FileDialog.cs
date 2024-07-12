@@ -13,6 +13,12 @@ public static class FileDialogNative
         return path != null;
     }
 
+    public static bool ShowOpenDirectoryDialog(string title, out string path)
+    {
+        path = s_dialogDriver.OpenDirectoryDialog(title);
+        return path != null;
+    }
+
     public static bool ShowNewFileDialog(string title, out string path)
     {
         path = s_dialogDriver.OpenFileDialog(title);

@@ -40,9 +40,19 @@ public class FileManagementController
 		}
 		string author = this.GetGitUserString();
 		string dateString = DateTime.Now.ToString("yyyy-MM-dd");
+
+		//Create the file based on the template
+		string[] parts = filePath.Split('.');
+		string extension = parts[parts.Length - 1];
+		string scriptsDir = "";
+		string[] allowedExtensions = GetAllowedFileExtensions(scriptsDir);
+
+		if (!allowedExtensions.Contains(extension))
+		{
+			Logger.Error($"❌ File format \"{extension}\" is not supported! Please create a template for this file type under the {scriptsDir} directory");
+			return;
+		}
 		
-		Logger.Debug(dateString);
-		Logger.Debug(author);
 	}
 
 	/// <summary>
@@ -57,6 +67,17 @@ public class FileManagementController
 			throw new CoconaException("Git is not installed or failed to run, try reinstalling to fix this issue!");
 		}
 		return result;
+	}
+
+	private string[] GetAllowedFileExtensions(string templatesPath)
+	{
+		string[] allFiles = Directory.GetFiles(templatesPath);
+
+		return allFiles.Select(fileName =>
+		{
+			string[] parts = fileName.Split('.');
+			return parts[parts.Length - 1];
+		}).ToArray();
 	}
 
 }

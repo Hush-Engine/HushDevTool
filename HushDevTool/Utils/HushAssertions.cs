@@ -1,5 +1,4 @@
-﻿using System;
-namespace HushDevTool.Utils;
+﻿namespace HushDevTool.Utils;
 
 public static class HushAssertions
 {

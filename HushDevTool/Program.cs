@@ -19,4 +19,11 @@ app.AddCommands<CodeQualityController>();
 app.AddCommands<BuildController>();
 app.AddCommands<FileManagementController>();
 
+//If we don't have the Hush environment, then add it to our PATH
+if (!EnvironmentUtils.IsHushRootSet())
+{
+    EnvironmentUtils.ChooseHushRoot();
+    HushAssertions.AssertTrue(EnvironmentUtils.IsHushRootSet());
+}
+
 app.Run();
