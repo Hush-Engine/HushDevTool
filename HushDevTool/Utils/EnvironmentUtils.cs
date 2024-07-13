@@ -1,5 +1,4 @@
-﻿using System;
-using System.Text;
+﻿using System.Text;
 
 namespace HushDevTool.Utils;
 
@@ -11,7 +10,7 @@ public static class EnvironmentUtils
 
     private const string ENV_PATH_KEY = "EnvironmentPath";
 
-    private const string DEVTOOL_CONFIG_NAME = ".devtoolconfig";
+    private const string DEVTOOL_CONFIG_NAME = "devtool.config";
 
     public static bool IsHushRootSet()
     {

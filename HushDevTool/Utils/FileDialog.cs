@@ -21,7 +21,7 @@ public static class FileDialogNative
 
     public static bool ShowNewFileDialog(string title, out string path)
     {
-        path = s_dialogDriver.OpenFileDialog(title);
+        path = s_dialogDriver.NewFileDialog(title);
         return path != null;
     }
 

@@ -9,7 +9,9 @@ namespace HushDevTool.Controllers;
 
 public class FileManagementController
 {
-	private ICommandLineService m_commandLineService;
+	public const string TEMPLATE_FILES_KEY = "TemplateFilesDir";
+
+    private ICommandLineService m_commandLineService;
 
     public FileManagementController(ICommandLineService commandLineService)
 	{
@@ -44,15 +46,28 @@ public class FileManagementController
 		//Create the file based on the template
 		string[] parts = filePath.Split('.');
 		string extension = parts[parts.Length - 1];
-		string scriptsDir = "";
-		string[] allowedExtensions = GetAllowedFileExtensions(scriptsDir);
+		string? templatedFilesDir = EnvironmentUtils.GetLocalVariableOrDefault(TEMPLATE_FILES_KEY);
+		if (templatedFilesDir == null)
+		{
+			Logger.Error("Template files directory not found, press any key to set this directory");
+			Console.ReadKey(true);
+			bool selected = FileDialogNative.ShowOpenDirectoryDialog("Select the templates directory!", out templatedFilesDir);
+			if (!selected)
+			{
+				Logger.Error("❌ Template files directory not set! Aborting file creation");
+				return;
+			}
+			//Set the env variable
+			EnvironmentUtils.SetLocalVariable(TEMPLATE_FILES_KEY, templatedFilesDir);
+		}
+		string[] allowedExtensions = GetAllowedFileExtensions(templatedFilesDir);
 
 		if (!allowedExtensions.Contains(extension))
 		{
-			Logger.Error($"❌ File format \"{extension}\" is not supported! Please create a template for this file type under the {scriptsDir} directory");
+			Logger.Error($"❌ File format \"{extension}\" is not supported! Please create a template for this file type under the {templatedFilesDir} directory");
 			return;
 		}
-		
+		Logger.Success("File Created!");
 	}
 
 	/// <summary>
