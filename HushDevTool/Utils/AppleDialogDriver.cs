@@ -26,7 +26,7 @@ public class AppleDialogDriver : IDialogDriver
         {
             return null;
         }
-        return outputFromCmd;
+        return outputFromCmd.TrimEnd('\n');
     }
 
     public string? NewFileDialog(string windowTitle)
@@ -41,7 +41,7 @@ public class AppleDialogDriver : IDialogDriver
         {
             return null;
         }
-        return outputFromCmd;
+        return outputFromCmd.TrimEnd('\n');
     }
 
     public string? OpenDirectoryDialog(string windowTitle)
@@ -56,7 +56,7 @@ public class AppleDialogDriver : IDialogDriver
         {
             return null;
         }
-        return outputFromCmd;
+        return outputFromCmd.TrimEnd('\n');
     }
 
     private string SaveAsCommand(string windowTitle)
