@@ -4,6 +4,7 @@ using HushDevTool.Utils;
 using Xamarin.Essentials;
 using Plugin.FilePicker;
 using HushDevTool.Services;
+using HushDevTool.Models.FileManagement;
 
 namespace HushDevTool.Controllers;
 
@@ -40,8 +41,6 @@ public class FileManagementController
 			Console.Write("Brief description of the file: ");
 			brief = Console.ReadLine();
 		}
-		string author = this.GetGitUserString();
-		string dateString = DateTime.Now.ToString("yyyy-MM-dd");
 
 		//Create the file based on the template
 		string[] parts = filePath.Split('.');
@@ -49,7 +48,7 @@ public class FileManagementController
 		string? templatedFilesDir = EnvironmentUtils.GetLocalVariableOrDefault(TEMPLATE_FILES_KEY);
 		if (templatedFilesDir == null)
 		{
-			Logger.Error("Template files directory not found, press any key to set this directory");
+			Logger.Warn("Template files directory not found, press any key to set this directory");
 			Console.ReadKey(true);
 			bool selected = FileDialogNative.ShowOpenDirectoryDialog("Select the templates directory!", out templatedFilesDir);
 			if (!selected)
@@ -67,7 +66,21 @@ public class FileManagementController
 			Logger.Error($"❌ File format \"{extension}\" is not supported! Please create a template for this file type under the {templatedFilesDir} directory");
 			return;
 		}
-		Logger.Success("File Created!");
+
+		//Actually create the file
+		string templateVersion = $"{templatedFilesDir}.{extension}";
+		string author = GetGitUserString();
+
+		var fileToCreate = new TemplatedFile(
+			filePath,
+			templateVersion,
+			author,
+			brief
+		);
+
+		fileToCreate.Save();
+
+		Logger.Success($"File {fileToCreate.FileName} created successfully!");
 	}
 
 	/// <summary>

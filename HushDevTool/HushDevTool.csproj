@@ -21,6 +21,7 @@
     <None Remove="Models\CodeQuality\" />
     <None Remove="Services\" />
     <None Remove="Utils\" />
+    <None Remove="Models\FileManagement\" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Controllers\" />
@@ -29,6 +30,7 @@
     <Folder Include="Models\CodeQuality\" />
     <Folder Include="Services\" />
     <Folder Include="Utils\" />
+    <Folder Include="Models\FileManagement\" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Cocona" Version="2.2.0" />

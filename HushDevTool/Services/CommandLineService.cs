@@ -47,7 +47,7 @@ public class CommandLineService : ICommandLineService
             {
                 if (p == null) return 1;
                 p.WaitForExit();
-                cmdOutput = p.StandardOutput.ReadToEnd();
+                cmdOutput = p.StandardOutput.ReadToEnd().TrimEnd('\n');
                 return p.ExitCode;
             }
         }

@@ -12,7 +12,7 @@ public static class EnvironmentUtils
 
     private const string DEVTOOL_CONFIG_NAME = "devtool.config";
 
-    public static bool IsHushRootSet()
+    private static bool IsHushRootSet()
     {
         if (string.IsNullOrEmpty(s_EnvironmentPath))
         {
@@ -24,6 +24,8 @@ public static class EnvironmentUtils
     public static string ChooseHushRoot()
     {
         string resultPath;
+        Logger.Warn("No configuration file was detected (devtool.config), press any key to create it!");
+        Console.ReadKey(true);
         bool success = FileDialogNative.ShowOpenDirectoryDialog(
             "Choose the root folder of the HushEngine",
             out resultPath
@@ -42,6 +44,11 @@ public static class EnvironmentUtils
     {
         //Open the file, find the variable and write to it or append it
         //TODO: Optimize this if needed (I don't think so tbh)
+        if (string.IsNullOrEmpty(s_EnvironmentPath))
+        {
+            ChooseHushRoot();
+        }
+
         if (configFilePath == string.Empty)
         {
             configFilePath = s_ConfigPath;
@@ -58,19 +65,22 @@ public static class EnvironmentUtils
     public static void SetLocalVariable<T>(string name, in T value)
     {
         //TODO: Use a single file pointer for all of this
-
+        if (string.IsNullOrEmpty(s_EnvironmentPath))
+        {
+            ChooseHushRoot();
+        }
         //Open the file, find the variable and write to it or append it
         using (FileStream fileStream = File.Open(s_ConfigPath, FileMode.OpenOrCreate, FileAccess.ReadWrite))
         {
             //let's do a buffer of 150 chars and a max of 14 lines of this length
-            Span<byte> fileBuffer = stackalloc byte[2010]; // 16Kb
+            Span<byte> fileBuffer = stackalloc byte[2048 * (sizeof(char) / sizeof(byte))]; // 16Kb
             fileStream.Read(fileBuffer);
             IEnumerable<string> rawLines = Encoding.ASCII.GetString(fileBuffer).Split('\n');
             Dictionary<string, string> lines = rawLines
                 .Where(line => line[0] != '\0')
                 .ToDictionary(line => line.Split('=')[0].Trim());
-            lines[name] = $"{name}={value}\n";
-            fileBuffer = Encoding.ASCII.GetBytes(string.Join('\n', lines.Values));
+            lines[name] = $"{name}={value}";
+            fileBuffer = Encoding.ASCII.GetBytes(string.Join('\n', lines.Values) + '\n');
             //Rewrite the file (we can get away with this because it's honestly not that much data)
             fileStream.SetLength(0);
             fileStream.Write(fileBuffer);
